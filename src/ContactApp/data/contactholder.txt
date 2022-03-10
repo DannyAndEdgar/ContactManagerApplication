@@ -1,2 +1,6 @@
-john doe (999)999-9999
-jane doe (800)777-7777
+john doe | (999)999-9999
+jane doe | (800)777-7777
+Tony Tiger | (123)123-1234
+Lucky Leprechaun | (222)222-2222
+Timmy Turner | (321)321-1234
+Chris Tucker | (333)333-3333
