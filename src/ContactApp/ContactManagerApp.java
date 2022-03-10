@@ -10,9 +10,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 
-
 public class ContactManagerApp {
 
+    private static List<String> contactList;
+    private static Path dataDirectoryAndFile;
+
+
+    public static void ContactApp() throws IOException {
+        ContactStarter();
+        Files.write(dataDirectoryAndFile, contactList);
+        System.out.println("Thank you for using this app!");
+    }
     public static void ContactStarter() throws IOException {
 
         String directory = "./src/ContactApp/data"; // here we made the file path and and gave it the name contactholder.text
@@ -21,20 +29,20 @@ public class ContactManagerApp {
 
         String fileName = "contactholder.txt";
 
-        Path dataDirectoryAndFile = Paths.get(directory, fileName);
+        dataDirectoryAndFile = Paths.get(directory, fileName);
 
         if(Files.notExists(dataDirectoryAndFile)){
             Files.createDirectories(dataDirectory);
 
             Files.createFile(dataDirectoryAndFile);
         }
-        System.out.println("dataDirectoryAndFile = " + dataDirectoryAndFile);
+//        System.out.println("dataDirectoryAndFile = " + dataDirectoryAndFile);
 
-        System.out.println("Here are your contacts: ");
+
         System.out.println();
 
 
-        List<String> contactList = Files.readAllLines(dataDirectoryAndFile);
+        contactList = Files.readAllLines(dataDirectoryAndFile);
 
 //        for(int i = 0; i < contactList.size(); i++){
 //            System.out.println("contactList.get(i) = " + contactList.get(i));
@@ -54,16 +62,19 @@ public class ContactManagerApp {
         
         int response = input.nextInt();
         if(response == 1){
+            System.out.println("Here are your contacts: ");
+            System.out.printf("Name | Phone Number%n---------------%n");
             for(int i = 0; i < contactList.size(); i++){
                 System.out.printf("%s %n", contactList.get(i));
             }
+            ContactStarter();
         }else if(response == 2){
             System.out.println("Please enter contact first and lastname:");
             String nothing = input.nextLine();
             String contactName = input.nextLine();
             System.out.println("Please enter the number to add: ");
             String contactNum = input.nextLine();
-            String contact = contactName + " " +contactNum;
+            String contact = contactName + " | " +contactNum;
             System.out.println("contact = " + contact);
             contactList.add(contact);
             Files.write(dataDirectoryAndFile,contactList);
@@ -81,14 +92,26 @@ public class ContactManagerApp {
                     System.out.println(contactList.get(i));
                 }
             }
+            ContactStarter();
+        }else if(response == 4){
+            System.out.println("Please enter the name of the contact you would like to delete: ");
+            String nothing = input.nextLine();
+            String nameToDelete = input.nextLine();
+            String nameDeletelowercase = nameToDelete.toLowerCase(Locale.ROOT);
+            for(int i = 0; i < contactList.size(); i++) {
+                String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
+                if (contactlowercase.contains(nameDeletelowercase)) {
+                    contactList.remove(i);
+                }
+            }
+            Files.write(dataDirectoryAndFile, contactList);
+            ContactStarter();
         }
-
-
 
     }
 
     public static void main(String[] args) throws IOException{
-        ContactStarter();
+        ContactApp();
     }
 
 }
