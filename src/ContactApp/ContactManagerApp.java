@@ -90,7 +90,7 @@ public class ContactManagerApp {
     public static void viewAllContacts() throws IOException {
         contactList = getContactList();
         System.out.println("Here are your contacts: ");
-        System.out.printf("Name | Phone Number%n---------------%n");
+        System.out.printf("                Name |   Phone Number%n               ---------------%n");
         for(int i = 0; i < contactList.size(); i++){
             System.out.printf("%s %n", contactList.get(i));
         }
@@ -101,32 +101,42 @@ public class ContactManagerApp {
         System.out.println("Please enter contact first and lastname:");
 //        String nothing = input.nextLine();
         String contactName = input.nextLine();
+        String formattedName = fixedStringLength(contactName, 20);
+
         System.out.println("Please enter the number to add: ");
-        String namelowercase = contactName.toLowerCase(Locale.ROOT);
-
         String contactNum = input.nextLine();
-        String contact = contactName + " | " +contactNum;
+        String formattedNum = fixedStringLength(contactNum, 15);
 
 
-        for(int i = 0; i < contactList.size(); i++){
+        String contact = formattedName + " | " + formattedNum + " |";
+
+        boolean nameChanged = false;
+
+        String namelowercase = contactName.toLowerCase(Locale.ROOT);
+        int numLoops = contactList.size();
+        for(int i = 0; i < numLoops; i++){
             String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
-            System.out.println("contactList.size() = " + contactList.size());
-            System.out.println("Iterating - I am on loop number " + i);
             if(contactlowercase.contains(namelowercase)){
+//                System.out.println(contactList);
+//                System.out.println(contactList.get(i));
                 System.out.println("This name already exist. Would you like to override it?");
                 String confirmation = input.nextLine();
                 if(confirmation.equalsIgnoreCase("Y")){
                     contactList.set(i, contact);
-                    System.out.println(contactList);
+                    nameChanged = true;
+//                    System.out.println(contactList);
 //                    break;
                 }else if(confirmation.equalsIgnoreCase("N")){
                     System.out.println("Ok, please enter a new name for the contact");
                     String newName = input.nextLine();
-                    String newContactName = newName + " | " + contactNum;
+                    String formatNewName = fixedStringLength(newName, 20);
+                    String newContactName = formatNewName + " | " + formattedNum + " |";
                     contactList.add(newContactName);
                 }
-            }else if(i == contactList.size()-1 && !contactlowercase.contains(namelowercase)){
+            }else if(i == (numLoops - 1) && !nameChanged){
+                System.out.println(!contactlowercase.contains(namelowercase));
                 contactList.add(contact);
+
             }
         }
 
@@ -166,8 +176,16 @@ public class ContactManagerApp {
         Files.write(dataDirectoryAndFile, contactList);
     }
 
+    public static String fixedStringLength(String string, int length) {
+        return String.format("%1$"+length + "s", string);
+    }
+
     public static void main(String[] args) throws IOException{
         ContactApp();
     }
-
+//        for(int i = 0; i < contactList.size(); i++){
+//        String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
+////            System.out.println("contactList.size() = " + contactList.size());
+////            System.out.println("Iterating - I am on loop number " + i);
+//        if(contactlowercase.contains(namelowercase)){
 }
