@@ -1,5 +1,4 @@
-package ContactApp;
-
+package ContactAppWithObjects;
 
 import java.nio.file.Files;
 import java.util.*;
@@ -10,7 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 
-public class ContactManagerApp {
+public class ContactAppObjects {
 
     private static List<String> contactList;
     private static Path dataDirectoryAndFile;
@@ -84,7 +83,7 @@ public class ContactManagerApp {
                 "5 - edit an existing contact\n" +
                 "Enter your choice: ");
 
-         return input.nextInt();
+        return input.nextInt();
     }
 
     public static void viewAllContacts() throws IOException {
