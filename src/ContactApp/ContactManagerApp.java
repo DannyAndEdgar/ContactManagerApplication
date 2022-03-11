@@ -102,10 +102,36 @@ public class ContactManagerApp {
 //        String nothing = input.nextLine();
         String contactName = input.nextLine();
         System.out.println("Please enter the number to add: ");
+        String namelowercase = contactName.toLowerCase(Locale.ROOT);
+
         String contactNum = input.nextLine();
         String contact = contactName + " | " +contactNum;
-        System.out.println("contact = " + contact);
-        contactList.add(contact);
+
+
+        for(int i = 0; i < contactList.size(); i++){
+            String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
+            System.out.println("contactList.size() = " + contactList.size());
+            System.out.println("Iterating - I am on loop number " + i);
+            if(contactlowercase.contains(namelowercase)){
+                System.out.println("This name already exist. Would you like to override it?");
+                String confirmation = input.nextLine();
+                if(confirmation.equalsIgnoreCase("Y")){
+                    contactList.set(i, contact);
+                    System.out.println(contactList);
+//                    break;
+                }else if(confirmation.equalsIgnoreCase("N")){
+                    System.out.println("Ok, please enter a new name for the contact");
+                    String newName = input.nextLine();
+                    String newContactName = newName + " | " + contactNum;
+                    contactList.add(newContactName);
+                }
+            }else if(i == contactList.size()-1 && !contactlowercase.contains(namelowercase)){
+                contactList.add(contact);
+            }
+        }
+
+//        System.out.println("contact = " + contact);
+
         Files.write(dataDirectoryAndFile,contactList);
 
     }
