@@ -37,18 +37,17 @@ public class ContactManagerApp {
 
         if(response == 1){
             viewAllContacts();
-            ContactStarter();
         }else if(response == 2){
             addContact();
-            ContactStarter();
         }else if(response == 3){
             getContact();
-            ContactStarter();
         }else if(response == 4){
             deleteContact();
-            ContactStarter();
-        }
+        }else if(response == 5){
+            editContact();
 
+        }
+        ContactStarter();
     }
 
     public static List<String> getContactList() throws IOException {
@@ -90,7 +89,7 @@ public class ContactManagerApp {
     public static void viewAllContacts() throws IOException {
         contactList = getContactList();
         System.out.println("Here are your contacts: ");
-        System.out.printf("                Name |   Phone Number%n               ---------------%n");
+        System.out.printf("                Name -   Phone Number%n               ---------------%n");
         for(int i = 0; i < contactList.size(); i++){
             System.out.printf("%s %n", contactList.get(i));
         }
@@ -108,7 +107,7 @@ public class ContactManagerApp {
         String formattedNum = fixedStringLength(contactNum, 15);
 
 
-        String contact = formattedName + " | " + formattedNum + " |";
+        String contact = formattedName + "  - " + formattedNum;
 
         boolean nameChanged = false;
 
@@ -130,7 +129,7 @@ public class ContactManagerApp {
                     System.out.println("Ok, please enter a new name for the contact");
                     String newName = input.nextLine();
                     String formatNewName = fixedStringLength(newName, 20);
-                    String newContactName = formatNewName + " | " + formattedNum + " |";
+                    String newContactName = formatNewName + "-" + formattedNum;
                     contactList.add(newContactName);
                 }
             }else if(i == (numLoops - 1) && !nameChanged){
@@ -145,6 +144,7 @@ public class ContactManagerApp {
         Files.write(dataDirectoryAndFile,contactList);
 
     }
+
 
     public static void getContact(){
         Scanner input = new Scanner(System.in);
@@ -171,6 +171,42 @@ public class ContactManagerApp {
             String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
             if (contactlowercase.contains(nameDeletelowercase)) {
                 contactList.remove(i);
+            }
+        }
+        Files.write(dataDirectoryAndFile, contactList);
+    }
+
+
+    public static void editContact() throws IOException{
+
+
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Which contact would you like to edit? ");
+        String response = input.nextLine();
+        String responselc = response.toLowerCase(Locale.ROOT);
+
+        for(int i = 0; i < contactList.size(); i++){
+            String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
+            String[] contactsplit = contactList.get(i).split(" - ");
+            if(contactlowercase.contains(responselc)){
+                System.out.println("Would you like to change the name or the number? 1 for number and 2 for name");
+                String choice = input.nextLine();
+                if(choice.equalsIgnoreCase("1")){
+                    System.out.println("Please enter the new number: ");
+                    String newNum = input.nextLine();
+                    String formattedname = fixedStringLength(contactsplit[0],20);
+                    String formattednum = fixedStringLength(newNum,15);
+                    String editedContact = formattedname + " - " + formattednum;
+                    contactList.set(i, editedContact);
+                }else if(choice.equalsIgnoreCase("2")){
+                    System.out.println("What's the new name");
+                    String newName = input.nextLine();
+                    String formatnewname = fixedStringLength(newName,20);
+                    String formatnewdigit = fixedStringLength(contactsplit[1],15);
+                    String editedName = formatnewname +"  - " + formatnewdigit;
+                    contactList.set(i, editedName);
+                }
             }
         }
         Files.write(dataDirectoryAndFile, contactList);
