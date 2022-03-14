@@ -153,12 +153,20 @@ public class ContactManagerApp {
         String nameLook = input.nextLine();
         String namelowercase = nameLook.toLowerCase(Locale.ROOT);
 
+        boolean nameFound = false;
+
         for(int i = 0; i < contactList.size(); i++){
             String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
             if(contactlowercase.contains(namelowercase)){
                 System.out.println(contactList.get(i));
+                nameFound = true;
             }
         }
+        if(!nameFound){
+            System.out.println("This contact does not exist.");
+            System.out.println();
+        }
+
     }
 
     public static void deleteContact() throws IOException {

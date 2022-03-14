@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 public class ContactAppObjects {
 
     private static List<String> contactList;
+    private static List<Contact> contactObjectList;
     private static Path dataDirectoryAndFile;
 
 
@@ -36,22 +37,20 @@ public class ContactAppObjects {
 
         if(response == 1){
             viewAllContacts();
-            ContactStarter();
         }else if(response == 2){
             addContact();
-            ContactStarter();
         }else if(response == 3){
             getContact();
-            ContactStarter();
         }else if(response == 4){
             deleteContact();
-            ContactStarter();
+        }else if(response == 5){
+            editContact();
         }
-
+    ContactStarter();
     }
 
     public static List<String> getContactList() throws IOException {
-        String directory = "./src/ContactApp/data"; // here we made the file path and and gave it the name contactholder.text
+        String directory = "./src/ContactAppWithObjects/data"; // here we made the file path and and gave it the name contactholder.text
 
         Path dataDirectory = Paths.get(directory);
 
@@ -89,7 +88,7 @@ public class ContactAppObjects {
     public static void viewAllContacts() throws IOException {
         contactList = getContactList();
         System.out.println("Here are your contacts: ");
-        System.out.printf("                Name |   Phone Number%n               ---------------%n");
+        System.out.printf("                Name -   Phone Number%n               ---------------%n");
         for(int i = 0; i < contactList.size(); i++){
             System.out.printf("%s %n", contactList.get(i));
         }
@@ -173,6 +172,52 @@ public class ContactAppObjects {
             }
         }
         Files.write(dataDirectoryAndFile, contactList);
+    }
+
+    public static void editContact() throws IOException{
+
+
+
+        Scanner input = new Scanner(System.in);
+        System.out.println("Which contact would you like to edit? ");
+        String response = input.nextLine();
+        String responselc = response.toLowerCase(Locale.ROOT);
+
+        for(int i = 0; i < contactList.size(); i++){
+            String contactlowercase = contactList.get(i).toLowerCase(Locale.ROOT);
+            String[] contactsplit = contactList.get(i).split(" - ");
+            if(contactlowercase.contains(responselc)){
+                System.out.println("Would you like to change the name or the number? 1 for number and 2 for name");
+                String choice = input.nextLine();
+                if(choice.equalsIgnoreCase("1")){
+                    System.out.println("Please enter the new number: ");
+                    String newNum = input.nextLine();
+                    String formattedname = fixedStringLength(contactsplit[0],20);
+                    String formattednum = fixedStringLength(newNum,15);
+                    String editedContact = formattedname + " - " + formattednum;
+                    contactList.set(i, editedContact);
+                }else if(choice.equalsIgnoreCase("2")){
+                    System.out.println("What's the new name");
+                    String newName = input.nextLine();
+                    String formatnewname = fixedStringLength(newName,20);
+                    String formatnewdigit = fixedStringLength(contactsplit[1],15);
+                    String editedName = formatnewname +"  - " + formatnewdigit;
+                    contactList.set(i, editedName);
+                }
+            }
+        }
+        Files.write(dataDirectoryAndFile, contactList);
+    }
+
+    public static void changeStringToObject(){
+        for(int i = 0; i < contactList.size(); i++){
+            String[] contactSplit = contactList.get(i).split(" - ");
+
+        }
+    }
+
+    public static void changeObjectsToString(){
+
     }
 
     public static String fixedStringLength(String string, int length) {
